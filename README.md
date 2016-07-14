@@ -15,6 +15,6 @@ Installation:
   
   
 
-The original archive with config files, that used in autobuild process is here ( goo.gl/GIOEDd )
+The autobuild process is not working with WIFI yet
 
 
