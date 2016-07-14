@@ -354,7 +354,6 @@ fFinalize () {
 
 	else
 
-		echo ; echo
 		echo "Не найден пакет lxdm установка отменяется _ The lxdm package does not exist installation is canceled "
 		echo
 
@@ -364,13 +363,19 @@ fFinalize () {
 
 	fi
 
-	echo ; echo
-
 
 
 ### final actions
 #-#
 ### завершающие действия
+
+
+
+	chmod 0755 ~/.config/mobox-sz/cmpEffOff
+	chmod 0755 ~/.config/mobox-sz/cmpEffOn
+	chmod 0755 ~/.config/mobox-sz/lxOn
+	chmod 0755 ~/.config/mobox-sz/tiOn
+	chmod 0755 ~/.config/mobox-sz/xfOn
 
 
 
@@ -463,7 +468,6 @@ fAUR () {
 	if [[ ! -z $noPkgs ]] ; then
 
 		echo "Небыли найдены следующие AUR пакеты ( $noPkgs) _ The ( $noPkgs) AUR packages was not found "
-
 		echo
 
 	fi
@@ -487,6 +491,8 @@ fAUR () {
 	done
 
 	echo -en "Установка пакетов AUR _ Installing AUR packages: $AcntAll _ $AcntCurr\033[0K\r"
+
+	echo ; echo
 
 	if [ $AcntErr -ne 0 ] ; then 
 
@@ -782,7 +788,6 @@ fX32 () {
 
 	else
 
-		echo ; echo
 		echo "Не удалось установить следующие пакеты ( $cntErrNames) _ Failed to install the following packages: ( $cntErrNames) "
 		echo
 
@@ -1187,6 +1192,8 @@ fX64 () {
 
 	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
 
+	echo ; echo
+
 
 
 ### end of x64 mobox-sz autobuild script process
@@ -1199,12 +1206,11 @@ fX64 () {
 
 		fFinalize
 
-		sed -i '4s/.*/0/' ~/.tmp-sz
 		sed -i '5s/.*/1/' ~/.tmp-sz
+		sed -i '4s/.*/0/' ~/.tmp-sz
 
 	else
 
-		echo ; echo
 		echo "Не удалось установить следующие пакеты ( $cntErrNames) _ Failed to install the following packages: ( $cntErrNames) "
 		echo
 
