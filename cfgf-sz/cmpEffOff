@@ -7,8 +7,8 @@
 
 killall compton
 
-if pidof tint2 &> /dev/null ; then cp ~/.config/setsZI/autostartTiC0 ~/.config/openbox/autostart ; fi
-if pidof lxpanel &> /dev/null ; then cp ~/.config/setsZI/autostartLxC0 ~/.config/openbox/autostart ; fi
-if pidof xfce4-panel &> /dev/null ; then cp ~/.config/setsZI/autostartXfC0 ~/.config/openbox/autostart ; fi
+if pidof tint2 &> /dev/null ; then cp ~/.config/mobox-sz/autostartTiC0 ~/.config/openbox/autostart ; fi
+if pidof lxpanel &> /dev/null ; then cp ~/.config/mobox-sz/autostartLxC0 ~/.config/openbox/autostart ; fi
+if pidof xfce4-panel &> /dev/null ; then cp ~/.config/mobox-sz/autostartXfC0 ~/.config/openbox/autostart ; fi
 
 

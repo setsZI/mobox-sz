@@ -8,11 +8,11 @@ killall lxpanel tint2
 
 if pidof compton &> /dev/null ; then 
 
-	cp ~/.config/setsZI/autostartXfC1 ~/.config/openbox/autostart
+	cp ~/.config/mobox-sz/autostartXfC1 ~/.config/openbox/autostart
 
 else
 
-	cp ~/.config/setsZI/autostartXfC0 ~/.config/openbox/autostart
+	cp ~/.config/mobox-sz/autostartXfC0 ~/.config/openbox/autostart
 
 fi
 
