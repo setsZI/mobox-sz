@@ -121,18 +121,18 @@
 		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="root-menu-75519" label="Panel">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/desktop-environment-lxde.svg" label="LXDE panel">
 				<action name="Execute">
-					<execute>./.config/setsZI/lxOn</execute>
+					<execute>./.config/mobox-sz/lxOn</execute>
 				</action>
 			</item>
 			<item icon="/usr/share/icons/hicolor/48x48/apps/xfce4-panel-menu.png" label="XFCE panel">
 				<action name="Execute">
-					<execute>./.config/setsZI/xfOn</execute>
+					<execute>./.config/mobox-sz/xfOn</execute>
 				</action>
 			</item>
 			<separator/>
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" label="Panel TINT2">
 				<action name="Execute">
-					<execute>./.config/setsZI/tiOn</execute>
+					<execute>./.config/mobox-sz/tiOn</execute>
 				</action>
 			</item>
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" label="TINT2 settings">
@@ -187,12 +187,12 @@
 		<menu icon="//usr/share/icons/hicolor/48x48/apps/compton.png" id="root-menu-73237" label="Desktop effects">
 			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="On">
 				<action name="Execute">
-					<execute>./.config/setsZI/cmpEffOn</execute>
+					<execute>./.config/mobox-sz/cmpEffOn</execute>
 				</action>
 			</item>
 			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="Off">
 				<action name="Execute">
-					<execute>./.config/setsZI/cmpEffOff</execute>
+					<execute>./.config/mobox-sz/cmpEffOff</execute>
 				</action>
 			</item>
 		</menu>
