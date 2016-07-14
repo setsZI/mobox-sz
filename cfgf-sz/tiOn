@@ -1,0 +1,21 @@
+
+
+
+#!/usr/bin/bash
+
+
+killall lxpanel xfce4-panel
+
+if pidof compton &> /dev/null ; then 
+
+	cp ~/.config/setsZI/autostartTiC1 ~/.config/openbox/autostart
+
+else
+
+	cp ~/.config/setsZI/autostartTiC0 ~/.config/openbox/autostart
+
+fi
+
+tint2
+
+

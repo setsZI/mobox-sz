@@ -1,0 +1,24 @@
+
+
+
+nitrogen --restore &
+
+compton -b &
+
+setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll us,ru &
+
+thunar --daemon &
+
+gxkb &
+
+pnmixer &
+
+parcellite &
+
+orage &
+
+nm-applet &
+
+(sleep 2s && xfce4-panel) &
+
+

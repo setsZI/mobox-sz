@@ -1,0 +1,1270 @@
+
+
+
+#!/usr/bin/bash
+
+
+
+scriptName="mobox-sz"
+scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
+scriptVers="2.0.0"
+scriptReadyDate="10/07/2016"
+osBaseName="Manjaro NET"
+osBaseVers="16.06.1"
+osBaseBit=$( uname -m )
+osResultName="Manjaro Openbox Current"
+osResultLang="RU EN"
+autobuildStartComment="$osResultName autobuild script MOBOX-SZ $scriptVers"
+
+
+
+usbd="GIOEDd"
+gen="UCVLHP"
+
+
+
+pkgsLine="thunar thunar-volman thunar-media-tags-plugin thunar-archive-plugin parcellite menda-themes menda-themes-dark lxdm lxinput lxtask tint2 tintwizard lxappearance lxrandr file-roller qpdfview gnome-themes-standard hardinfo firefox chromium thunderbird vlc nitrogen manjaro-settings-manager wine wine-mono wine_gecko samba gnome-alsamixer xsensors viewnior gpicview menumaker obmenu obmenu-generator openbox obconf openbox-themes octopi gksu xterm gparted geany menda-circle-icon-theme xcursor-simpleandsoft jdk8-openjdk terminator gnome-terminal lxterminal manjaro-artwork-openbox manjaro-users-artwork-wallpapers manjarobox-artwork git galculator clementine gstreamer0.10-bad-plugins gstreamer0.10-base-plugins gstreamer0.10-good-plugins gstreamer0.10-ugly-plugins gst-plugins-bad gst-plugins-ugly gst-libav qbittorrent pidgin compton libreoffice-fresh-ru leafpad tumbler ffmpegthumbnailer network-manager-applet xfce4-notifyd perl-file-mimeinfo xcursor-bluecurve xcursor-breeze xcursor-menda xfce4-screenshooter orage pulseaudio skype catfish imagewriter sunflower lxpanel"
+
+
+
+if [ ! -f ~/mobox/mobox-sz ] ; then
+
+	wget goo.gl/$usbd ; unzip $usbd
+
+fi
+
+
+
+echo ; echo
+
+read -s -p "Введите пароль суперпользователя _ Enter the SU password: " sudoPsw
+
+echo ; echo
+
+if ! echo "$sudoPsw" | sudo -Sv -p "" &> /dev/null ; then echo "Неверный пароль _ Incorrect password " ; echo ; echo ; exit ; fi
+if echo "$sudoPsw" | sudo -Sv -p "" &> /dev/null ; then echo "Пароль верный _ The password is correct " ; fi
+
+echo ; echo
+
+echo "|######### MOBOX-SZ script 2.0.0 for MANJARO NET 16.06.1 #########|"
+echo "|                                                                 |"
+echo "|_________________________________________________________________|"
+
+echo ; echo
+
+
+
+if sudo pacman -Si screenfetch &> /dev/null ; then
+
+	if ! sudo pacman -Qq screenfetch &> /dev/null ; then sudo pacman -S screenfetch --noconfirm &> /dev/null ; fi
+
+	screenfetch
+
+fi
+
+echo
+
+
+
+### creating if wasn't created file for saving installation settings
+#-#
+### создаем файл для сохранения параметров установки если он еще небыл создан
+
+
+
+if [ ! -f ~/.tmp-sz ] ; then
+
+
+
+	### select interface lang of OS
+	#-#
+	### выбор языка интерфейса ОС
+
+
+
+	read -p ">>> Выберете один из двух вариантов _ Select one of two options: ( 1 ) - русский интерфейс ОС _ RU lang interface of OS, ( 2 ) - английский интерфейс ОС _ EN lang interface of OS: " osLang
+
+	if [[ $osLang != "1" && $osLang != "2" ]] ; then 
+
+		echo
+		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
+		echo ; echo ; exit
+
+	else
+
+		rzltCode="$osLang";
+
+	fi
+
+
+
+	### select OS architecture, auto select
+	#-#
+	### выбор разрядности ОС, автовыбор
+
+
+
+	if [[ $osBaseBit != "x86_64" && $osBaseBit != "i686" ]] ; then
+
+		echo
+
+		read -p ">>> Выберете один из двух вариантов _ Select one of two options: ( 1 ) - x32, ( 2 ) - x64: " osBit
+
+	else
+
+		if [ $osBaseBit == "i686" ] ; then osBit=1 ; fi
+		if [ $osBaseBit == "x86_64" ] ; then osBit=2 ; fi
+
+	fi
+
+	if [[ $osBit != "1" && $osBit != "2" ]] ; then 
+
+		echo
+		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
+		echo ; echo ; exit
+
+	else
+
+		rzltCode="$rzltCode$osBit"
+
+	fi
+
+	echo
+
+
+
+	### select free or proprietary video driver
+	#-#
+	### выбор свободного или проприетарного видеодрайвера
+
+
+
+	read -p ">>> Выберете один из двух вариантов _ Select one of two options: ( 1 ) - открытый видеодрайвер _ free video driver,  ( 2 ) - проприетарный видеодрайвер _ proprietary video driver: " osVid
+
+	if [[ $osVid != "1" && $osVid != "2" ]] ; then 
+
+		echo
+		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
+		echo ; echo ; exit
+
+	else
+
+		rzltCode="$rzltCode$osVid"
+
+	fi
+
+	echo
+
+
+
+	echo "$osLang" >> ~/.tmp-sz
+	echo "$osBit" >> ~/.tmp-sz
+	echo "$osVid" >> ~/.tmp-sz
+	echo "0" >> ~/.tmp-sz
+	echo "0" >> ~/.tmp-sz
+
+	rzltCode=0
+
+	mkdir ~/.originalOSFiles-sz &> /dev/null
+
+else
+
+	rzltCode=1
+
+fi
+
+
+
+### reading installation settings from file into the vars
+#-#
+### читаем из файла сохраненных настроек их значения и присваиваем переменным
+
+
+
+while IFS='' read -r fLine || [[ -n "$fLine" ]] ; do
+
+	if [ -z $osLang ] ; then osLang=$fLine
+	elif [ -z $osBit ] ; then osBit=$fLine
+	elif [ -z $osVid ] ; then osVid=$fLine
+	elif [ -z $scRun ] ; then scRun=$fLine ; fi
+
+done < ~/.tmp-sz
+
+
+
+if [ $osLang -eq 1 ] ; then
+
+	if ! diff ~/mobox/cfgf-os/vconsole.conf /etc/vconsole.conf > /dev/null ; then
+
+		sudo cp /etc/vconsole.conf ~/.originalOSFiles-sz/vconsole.conf
+		sudo cp ~/mobox/cfgf-os/vconsole.conf /etc/vconsole.conf
+		echo
+		echo "Setting up russian font for console [ OK ] "
+		echo
+		echo "Reboot is required "
+		echo -n "Rebooting in 5 seconds "
+		for i in {1..5} ; do echo -n "." ; sleep 1s ; done
+		echo
+		reboot
+
+	else
+
+		if [ $scRun -eq 0 ] ; then rzltCode=0 ; fi
+
+	fi
+
+else
+
+	if [ $scRun -eq 0 ] ; then rzltCode=0 ; fi
+
+fi
+
+
+
+sed -i '4s/.*/1/' ~/.tmp-sz
+sed -i '5s/.*/0/' ~/.tmp-sz
+
+
+
+echo ">>> OK "
+echo
+
+
+
+if [ -f /var/lib/pacman/db.lck ] ; then sudo rm /var/lib/pacman/db.lck ; fi
+setterm -blank 0 -powerdown 0
+
+
+
+#######################################################################################################
+
+
+
+fStart () {
+
+
+
+	if [ $osBit -eq 2 ] ; then fX64 ; fi
+	if [ $osBit -eq 1 ] ; then fX32 ; fi
+
+
+
+}
+
+
+
+#######################################################################################################
+
+
+
+fFinalize () {
+
+
+
+	mkdir ~/.config &> /dev/null
+	mkdir ~/.config/openbox &> /dev/null
+	mkdir ~/.config/nitrogen &> /dev/null
+	mkdir ~/.config/Thunar &> /dev/null
+	mkdir ~/.config/gtk-3.0 &> /dev/null
+	mkdir ~/.config/tint2 &> /dev/null
+	mkdir ~/.local &> /dev/null
+	mkdir ~/.local/share &> /dev/null
+	mkdir ~/.local/share/applications &> /dev/null
+	mkdir ~/.icons &> /dev/null
+	mkdir ~/.icons/default &> /dev/null
+	mkdir ~/.config/orage &> /dev/null
+	mkdir ~/.config/lxpanel &> /dev/null
+	mkdir ~/.config/lxpanel/default &> /dev/null
+	mkdir ~/.config/lxpanel/default/panels &> /dev/null
+	mkdir ~/.config/mobox-sz &> /dev/null
+
+
+
+### before copy config files of current autobuild script search them in base OS and if find then copy originals into the hidden folder .originalOSFiles-sz, this actions are only for analytics, this folder can be removed
+#-#
+### перед копированием файлов настроек данной автосборки осуществляем их поиск в базовой ОС и если находим, то сохраняем оригиналы файлов в скрытую папку .originalOSFiles-sz, сделано только для анализа, папку можно удалить если эти файлы не нужны
+
+
+
+	fListH="~/.config/openbox/rc.xml ~/.config/nitrogen/nitrogen.cfg ~/.config/nitrogen/bg-saved.cfg ~/.config/mimeapps.list ~/.local/share/applications/mimeapps.list ~/.config/Trolltech.conf ~/.config/Thunar/uca.xml ~/.config/gtk-3.0/settings.ini ~/.gtkrc-2.0 ~/.Xresources ~/.config/tint2/tint2rc ~/.icons/default/index.theme ~/.config/orage/oragerc ~/.config/openbox/menu.xml ~/.config/lxpanel/default/panels/panel ~/.config/openbox/autostart "
+
+	fListR="/etc/locale.conf /etc/locale.gen /etc/X11/xorg.conf.d/50-mouse-acceleration.conf "
+
+	for i in $fListH ; do fName="${i##*/}" ; cp ~/$i ~/.originalOSFiles-sz/$fName &> /dev/null ; done
+	for i in $fListR ; do fName="${i##*/}" ; cp $i ~/.originalOSFiles-sz/$fName &> /dev/null ; done
+
+
+
+### copy all config files of this archive ( goo.gl/$usbd ) into OS based
+#-#
+### копируем все файлы конфигураций текущего архива ( goo.gl/$usbd ) в базовую OC
+
+
+
+	cp ~/mobox/cfgf-os/rc.xml ~/.config/openbox/rc.xml
+	cp ~/mobox/cfgf-os/nitrogen.cfg ~/.config/nitrogen/nitrogen.cfg
+	cp ~/mobox/cfgf-os/bg-saved.cfg ~/.config/nitrogen/bg-saved.cfg
+	cp ~/mobox/cfgf-os/mimeapps.list ~/.config/mimeapps.list
+	cp ~/mobox/cfgf-os/mimeapps.list ~/.local/share/applications/mimeapps.list
+	cp ~/mobox/cfgf-os/Trolltech.conf ~/.config/Trolltech.conf
+	cp ~/mobox/cfgf-os/uca.xml ~/.config/Thunar/uca.xml
+	cp ~/mobox/cfgf-os/settings.ini ~/.config/gtk-3.0/settings.ini
+	cp ~/mobox/cfgf-os/.gtkrc-2.0 ~/.gtkrc-2.0
+	cp ~/mobox/cfgf-os/.Xresources ~/.Xresources
+	cp ~/mobox/cfgf-os/tint2rc ~/.config/tint2/tint2rc
+	sudo cp ~/mobox/cfgf-os/tint2rc /usr/share/tint2/mobox-sz.tint2rc
+	cp ~/mobox/cfgf-os/index.theme ~/.icons/default/index.theme
+	cp ~/mobox/cfgf-os/oragerc ~/.config/orage/oragerc
+
+	if [ $osLang -eq 1 ] ; then cp ~/mobox/cfgf-os/menu-RU.xml ~/.config/openbox/menu.xml ; fi
+	if [ $osLang -eq 2 ] ; then cp ~/mobox/cfgf-os/menu-EN.xml ~/.config/openbox/menu.xml ; fi
+	if [ $osLang -eq 1 ] ; then sudo cp ~/mobox/cfgf-os/locale-RU.conf /etc/locale.conf ; fi
+	if [ $osLang -eq 1 ] ; then sudo cp ~/mobox/cfgf-os/locale-RU.gen /etc/locale.gen ; fi
+	if [ $osLang -eq 2 ] ; then sudo cp ~/mobox/cfgf-os/locale-EN.conf /etc/locale.conf ; fi
+	if [ $osLang -eq 2 ] ; then sudo cp ~/mobox/cfgf-os/locale-EN.gen /etc/locale.gen ; fi
+
+	sudo cp ~/mobox/cfgf-os/50-mouse-acceleration.conf /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+	cp ~/mobox/cfgf-os/panel ~/.config/lxpanel/default/panels/panel
+
+	cp ~/mobox/cfgf-sz/autostartTiC1 ~/.config/openbox/autostart
+
+	cp ~/mobox/cfgf-sz/autostartTiC0 ~/.config/mobox-sz/autostartTiC0
+	cp ~/mobox/cfgf-sz/autostartTiC1 ~/.config/mobox-sz/autostartTiC1
+	cp ~/mobox/cfgf-sz/autostartLxC0 ~/.config/mobox-sz/autostartLxC0
+	cp ~/mobox/cfgf-sz/autostartLxC1 ~/.config/mobox-sz/autostartLxC1
+	cp ~/mobox/cfgf-sz/autostartXfC0 ~/.config/mobox-sz/autostartXfC0
+	cp ~/mobox/cfgf-sz/autostartXfC1 ~/.config/mobox-sz/autostartXfC1
+	cp ~/mobox/cfgf-sz/cmpEffOff ~/.config/mobox-sz/cmpEffOff
+	cp ~/mobox/cfgf-sz/cmpEffOn ~/.config/mobox-sz/cmpEffOn
+	cp ~/mobox/cfgf-sz/lxOn ~/.config/mobox-sz/lxOn
+	cp ~/mobox/cfgf-sz/tiOn ~/.config/mobox-sz/tiOn
+	cp ~/mobox/cfgf-sz/xfOn ~/.config/mobox-sz/xfOn
+
+
+
+### adding lxdm display manager into autostart
+#-#
+### добавляем менеджер дисплея lxdm в автозагрузку
+
+
+
+	if sudo pacman -Qq lxdm &> /dev/null ; then
+
+		sudo systemctl enable lxdm.service -f &> /dev/null
+
+	else
+
+		echo ; echo
+		echo "Не найден пакет lxdm установка отменяется _ The lxdm package does not exist installation is canceled "
+		echo
+
+		sed -i '4s/.*/0/' ~/.tmp-sz
+			
+		exit
+
+	fi
+
+	echo ; echo
+
+
+
+### final actions
+#-#
+### завершающие действия
+
+
+
+	gconftool-2 --set --type boolean /apps/gksu/sudo-mode true
+	sudo cp /etc/samba/smb.conf.default /etc/samba/smb.conf &> /dev/null
+
+	sudo locale-gen &> /dev/null
+
+	if [ $osLang -eq 1 ] ; then sudo localectl set-locale LANG=ru_RU.UTF-8 &> /dev/null ; fi
+	if [ $osLang -eq 2 ] ; then sudo localectl set-locale LANG=en_US.UTF-8 &> /dev/null ; fi
+
+	psd &> /dev/null
+	cp ~/mobox/cfgf-os/psd.conf ~/.config/psd/psd.conf
+	systemctl --user enable psd.service &> /dev/null
+
+#	yes | sudo mhwd-kernel -i linux44 rmc &> /dev/null
+
+
+
+	echo "Обновление загрузчика GRUB _ Update the GRUB loader "
+	sudo update-grub &> /dev/null
+
+
+
+	sudo mhwd-gpu --check &> /dev/null
+	sudo mhwd-gpu --status &> /dev/null
+
+	if [ $osVid -eq 2 ] ; then
+
+		echo
+		echo "Установка проприетарного видеодрайвера _ Installig proprietary video driver "
+
+		sudo mhwd -f -i pci video-nvidia-340xx &> /dev/null
+
+		sudo mhwd-gpu --check &> /dev/null
+		sudo mhwd-gpu --status &> /dev/null
+
+	fi
+
+	echo
+
+
+
+}
+
+
+
+#######################################################################################################
+
+
+
+fAUR () {
+
+
+
+	AURlistOne="gxkb ttf-ms-fonts ttf-tahoma profile-sync-daemon pnmixer multisystem"
+
+	if [ $osBit -eq 2 ] ; then AURlistOne="$AURlistOne chromium-pepper-flash " ; else AURlistOne="$AURlistOne " ; fi
+
+	AURlistTwo="delorean-dark-themes-3.8 dorian-flat openbox-shiki-colors-themes mint-x-theme "
+
+	AURlistAll="$AURlistOne$AURlistTwo" ; AURafterCheck=""
+
+	noPkgs="" ; AcntAll=0 ; AcntCurr=0 ; AcntErr=0 ; AcntErrNames=""
+
+	for i in $AURlistAll ; do AcntAll=$( expr $AcntAll + 1 ) ; done
+
+	for AURpkg in $AURlistAll ; do
+
+		echo -en "Проверка пакетов AUR _ Checking AUR packages: $AcntAll _ $AcntCurr _ $AURpkg\033[0K\r"
+
+		if ! yaourt -Si $AURpkg &> /dev/null ; then
+			
+			noPkgs="$noPkgs$AURpkg "
+		
+		else
+
+			AcntCurr=$( expr $AcntCurr + 1 )
+
+			AURafterCheck="$AURafterCheck$AURpkg "
+
+		fi
+
+	done
+
+	echo -en "Проверка пакетов AUR _ Checking AUR packages: $AcntAll _ $AcntCurr\033[0K\r"
+
+	echo ; echo
+
+	if [[ ! -z $noPkgs ]] ; then
+
+		echo "Небыли найдены следующие AUR пакеты ( $noPkgs) _ The ( $noPkgs) AUR packages was not found "
+
+		echo
+
+	fi
+
+	AcntCurr=0
+
+	for AURpkg in $AURafterCheck ; do
+
+		echo -en "Установка пакетов AUR _ Installing AUR packages: $AcntAll _ $AcntCurr _ $AURpkg\033[0K\r"
+
+		if yaourt -S $AURpkg --noconfirm &> /dev/null ; then
+
+			AcntCurr=$( expr $AcntCurr + 1 )
+
+		else
+
+			AcntErr=$( expr $AcntErr + 1 ) ; AcntErrNames="$AcntErrNames$AURpkg "
+
+		fi
+
+	done
+
+	echo -en "Установка пакетов AUR _ Installing AUR packages: $AcntAll _ $AcntCurr\033[0K\r"
+
+	if [ $AcntErr -ne 0 ] ; then 
+
+		echo "Не удалось установить следующие пакеты AUR ( $AcntErrNames) _ Failed to install the following AUR packages: ( $AcntErrNames) "
+		echo
+
+	fi
+
+
+
+}
+
+
+
+#######################################################################################################
+
+
+
+fX32 () {
+
+
+
+	if [ $rzltCode -eq 0 ] ; then
+
+		echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
+		echo
+		sudo pacman-mirrors -g &> /dev/null
+
+		echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+		echo
+		sudo pacman-key --refresh-keys &> /dev/null
+		sudo pacman -S gnupg --noconfirm &> /dev/null
+
+	fi
+
+	echo "Синхронизация репозиториев _ Synchronizing repositories "
+	echo
+	sudo pacman -Syy --noconfirm &> /dev/null
+
+	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
+
+
+
+### prepare the list of all packages and updates for install
+#-#
+### подготовка общего списка пакетов для установки, в том числе и всех обновлений
+
+
+
+	if ! sudo pacman -Sup --print-format %n &> /dev/null ; then sudo pacman -Sup --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	updPkgs=$( sudo pacman -Sup --print-format %n )
+	updPkgsCNTAll=0 ; updPkgsCl=""
+
+	for updPkg in $updPkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $updPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then updPkgsCNTAll=$( expr $updPkgsCNTAll + 1 ) ; updPkgsCl="$updPkgsCl$updPkg " ; fi
+
+	done
+
+
+
+	if ! sudo pacman -Sp base-devel --print-format %n &> /dev/null ; then sudo pacman -Sp base-devel --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0	
+	baseDevelPkgs=$( sudo pacman -Sp base-devel --print-format %n )
+	baseDevelPkgsCNTAll=0 ; baseDevelPkgsCl=""
+
+	for baseDevelPkg in $baseDevelPkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $baseDevelPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then baseDevelPkgsCNTAll=$( expr $baseDevelPkgsCNTAll + 1 ) ; baseDevelPkgsCl="$baseDevelPkgsCl$baseDevelPkg " ; fi
+
+	done
+
+
+
+	if ! sudo pacman -Sp yaourt --print-format %n &> /dev/null ; then sudo pacman -Sp yaourt --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	yaourtPkgs=$( sudo pacman -Sp yaourt --print-format %n )
+	yaourtPkgsCNTAll=0 ; yaourtPkgsCl=""
+
+	for yaourtPkg in $yaourtPkgs ; do
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $yaourtPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then yaourtPkgsCNTAll=$( expr $yaourtPkgsCNTAll + 1 ) ; yaourtPkgsCl="$yaourtPkgsCl$yaourtPkg " ; fi
+
+	done
+
+
+
+### check the existence of $pkgsLine packages and exit if one or more of them is not found
+#-#
+### проверка списка пакетов из переменной $pkgsLine на наличие их в репозиториях и остановка процесса если хотя бы один небыл найден
+
+
+
+	if [ $osLang -eq 1 ] ; then pkgsLine="$pkgsLine firefox-i18n-ru thunderbird-i18n-ru aspell-ru man-pages-ru steam-manjaro " ; fi
+	if [ $osLang -eq 2 ] ; then pkgsLine="$pkgsLine firefox-i18n-en-us thunderbird-i18n-en-us steam-manjaro " ; fi
+
+	noPkgs="" ; cntAll=0 ; cntCurr=0
+
+	for pkg in $pkgsLine ; do cntAll=$( expr $cntAll + 1 ) ; done
+
+	for pkg in $pkgsLine ; do
+
+		echo -en "Проверка базовых пакетов _ Checking base packages: $cntAll _ $cntCurr _ $pkg\033[0K\r"
+
+		if ! sudo pacman -Si $pkg &> /dev/null ; then noPkgs="$noPkgs$pkg " ; else cntCurr=$( expr $cntCurr + 1 ) ; fi
+
+	done
+
+	echo -en "Проверка базовых пакетов _ Checking base packages: $cntAll _ $cntCurr\033[0K\r"
+
+	echo ; echo
+
+	if [[ -z $noPkgs ]] ; then
+
+		if ! sudo pacman -Sp $pkgsLine --print-format %n &> /dev/null ; then sudo pacman -Sp $pkgsLine --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+		pkgs=$( sudo pacman -Sp $pkgsLine --print-format %n )
+
+	else
+
+		echo "Небыли найдены следующие пакеты ( $noPkgs), установка прерывается _ The ( $noPkgs) packages was not found, installation failed "
+		echo
+
+		sed -i '4s/.*/0/' ~/.tmp-sz ; exit
+
+	fi
+
+	corr=0
+	pkgsCNTAll=0 ; pkgsCl=""
+
+	for pkg in $pkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $pkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then pkgsCNTAll=$( expr $pkgsCNTAll + 1 ) ; pkgsCl="$pkgsCl$pkg " ; fi
+
+	done
+
+
+
+### download all packages instead AUR
+#-#
+### скачивание общего списка пакетов, пакеты AUR будут устанавливаться отдельно
+
+
+
+	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
+
+	pkgsAll="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
+
+	cntCurr=0 ; cntErr=0 ; cntErrNames="" ; cntErrDwnl=0 ; cntErrNamesDwnl=""
+
+	partsCnt=0 ; partsPkg="" ; cntCh=0
+
+	for currPkg in $pkgsAll ; do
+
+		cntCh=$( expr $cntCh + 1 )
+
+		partsCnt=$( expr $partsCnt + 1 )
+
+		partsPkg="$partsPkg$currPkg "
+
+		if [[ $partsCnt -eq 20 || $cntCh -eq $cntAll ]] ; then
+
+			echo -en "Загрузка пакетов _ Downloading packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -Sw $partsPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + $partsCnt )
+
+			else
+
+				for errPkg in $partsPkg ; do
+				
+					if ! sudo pacman -Sw $errPkg --noconfirm &> /dev/null ; then
+
+						cntErrDwnl=$( expr $cntErrDwnl + 1 ) ; cntErrNamesDwnl="$cntErrNamesDwnl$errPkg "
+
+					fi
+
+				done
+
+			fi
+
+			partsCnt=0 ; partsPkg=""
+
+		fi
+
+	done
+
+	cntCurr=$( expr $cntCurr + $partsCnt )
+
+	echo -en "Загрузка пакетов _ Downloading packages: $cntAll _ $cntCurr\033[0K\r"
+
+	if [ $cntErrDwnl -ne 0 ] ; then echo ; echo ; echo "Не удалось скачать следующие пакеты _ Failed to download the following packages: ( $cntErrNamesDwnl) " ; echo ; else echo ; echo ; fi
+
+
+
+### install all downloaded packages and updates
+#-#
+### установка всех скачанных пакетов и обновлений
+
+
+
+	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+
+	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+
+	cntCurr=0
+
+	partsCnt=0 ; partsPkg="" ; cntCh=0
+
+	for currPkg in $listOne ; do
+
+		cntCh=$( expr $cntCh + 1 )
+
+		partsCnt=$( expr $partsCnt + 1 )
+
+		partsPkg="$partsPkg$currPkg "
+
+		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntOne ]] ; then
+
+			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + $partsCnt )
+
+			else
+
+				for errPkg in $partsPkg ; do
+				
+					if ! sudo pacman -S $errPkg --noconfirm &> /dev/null ; then
+
+						cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+
+					fi
+
+				done
+
+			fi
+
+			partsCnt=0 ; partsPkg=""
+
+		fi
+
+	done
+
+	cntCurr=$( expr $cntCurr + $partsCnt )
+
+	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+	echo ; echo
+
+
+
+### AUR packages - downloading and installing
+#-#
+### скачивание и установка пакетов из репозитория пользователей ArchLinux
+
+
+
+	fAUR
+
+
+
+### end of x32 mobox-sz autobuild script process
+#-#
+### окончание работы скрипта автосборки mobox-sz для 32 битной ОС
+
+
+
+	sudo mhwd-gpu --status &> /dev/null
+	sudo mhwd-gpu --check &> /dev/null
+
+	if [[ $cntErr -eq 0 && $cntErrDwnl -eq 0 ]] ; then 
+
+		fFinalize
+
+		sed -i '5s/.*/1/' ~/.tmp-sz
+		sed -i '4s/.*/0/' ~/.tmp-sz
+
+	else
+
+		echo ; echo
+		echo "Не удалось установить следующие пакеты ( $cntErrNames) _ Failed to install the following packages: ( $cntErrNames) "
+		echo
+
+		echo "Не все обязательные пакеты были установлены, перезапустите скрипт автосборки _ Not all required packages have been installed, restart the autobuild script "
+		echo
+
+		sed -i '4s/.*/0/' ~/.tmp-sz
+
+	fi
+
+
+
+}
+
+
+
+#######################################################################################################
+
+
+
+fX64 () {
+
+
+
+	if [ $rzltCode -eq 0 ] ; then
+
+		echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
+		echo
+		sudo pacman-mirrors -g &> /dev/null
+
+		echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+		echo
+		sudo pacman-key --refresh-keys &> /dev/null
+		sudo pacman -S gnupg --noconfirm &> /dev/null
+
+	fi
+
+	echo "Синхронизация репозиториев _ Synchronizing repositories "
+	echo
+	sudo pacman -Syy --noconfirm &> /dev/null
+
+	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
+
+
+
+### prepare the list of all packages and updates for install
+#-#
+### подготовка общего списка пакетов для установки, в том числе и всех обновлений
+
+
+
+	if ! sudo pacman -Sup --print-format %n &> /dev/null ; then sudo pacman -Sup --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	updPkgs=$( sudo pacman -Sup --print-format %n )
+	updPkgsCNTAll=0 ; updPkgsCl=""
+
+	for updPkg in $updPkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $updPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then updPkgsCNTAll=$( expr $updPkgsCNTAll + 1 ) ; updPkgsCl="$updPkgsCl$updPkg " ; fi
+
+	done
+
+
+
+	if ! sudo pacman -Sp base-devel --print-format %n &> /dev/null ; then sudo pacman -Sp base-devel --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0	
+	baseDevelPkgs=$( sudo pacman -Sp base-devel --print-format %n )
+	baseDevelPkgsCNTAll=0 ; baseDevelPkgsCl=""
+
+	for baseDevelPkg in $baseDevelPkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $baseDevelPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then baseDevelPkgsCNTAll=$( expr $baseDevelPkgsCNTAll + 1 ) ; baseDevelPkgsCl="$baseDevelPkgsCl$baseDevelPkg " ; fi
+
+	done
+
+	if sudo pacman -Qq gcc-multilib &> /dev/null ; then
+
+		baseDevelPkgsCl="" ; baseDevelPkgsCNTAll=0
+
+	fi
+
+
+
+	if ! sudo pacman -Sp multilib-devel --print-format %n &> /dev/null ; then sudo pacman -Sp multilib-devel --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0	
+	mltlDevelPkgs=$( sudo pacman -Sp multilib-devel --print-format %n )
+	mltlDevelPkgsCNTAll=0 ; mltlDevelPkgsCl=""
+
+	for mltlDevelPkg in $mltlDevelPkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $mltlDevelPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then mltlDevelPkgsCNTAll=$( expr $mltlDevelPkgsCNTAll + 1 ) ; mltlDevelPkgsCl="$mltlDevelPkgsCl$mltlDevelPkg " ; fi
+
+	done
+
+
+
+	if ! sudo pacman -Sp yaourt --print-format %n &> /dev/null ; then sudo pacman -Sp yaourt --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	yaourtPkgs=$( sudo pacman -Sp yaourt --print-format %n )
+	yaourtPkgsCNTAll=0 ; yaourtPkgsCl=""
+
+	for yaourtPkg in $yaourtPkgs ; do
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $yaourtPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then yaourtPkgsCNTAll=$( expr $yaourtPkgsCNTAll + 1 ) ; yaourtPkgsCl="$yaourtPkgsCl$yaourtPkg " ; fi
+
+	done
+
+
+
+### check the existence of $pkgsLine packages and exit if one or more of them is not found
+#-#
+### проверка списка пакетов из переменной $pkgsLine на наличие их в репозиториях и остановка процесса если хотя бы один небыл найден
+
+
+
+	if [ $osLang -eq 1 ] ; then pkgsLine="$pkgsLine firefox-i18n-ru thunderbird-i18n-ru aspell-ru man-pages-ru " ; fi
+	if [ $osLang -eq 2 ] ; then pkgsLine="$pkgsLine firefox-i18n-en-us thunderbird-i18n-en-us " ; fi
+
+	noPkgs="" ; cntAll=0 ; cntCurr=0
+
+	for pkg in $pkgsLine ; do cntAll=$( expr $cntAll + 1 ) ; done
+
+	for pkg in $pkgsLine ; do
+
+		echo -en "Проверка базовых пакетов _ Checking base packages: $cntAll _ $cntCurr _ $pkg\033[0K\r"
+
+		if ! sudo pacman -Si $pkg &> /dev/null ; then noPkgs="$noPkgs$pkg " ; else cntCurr=$( expr $cntCurr + 1 ) ; fi
+
+	done
+
+	echo -en "Проверка базовых пакетов _ Checking base packages: $cntAll _ $cntCurr\033[0K\r"
+
+	echo ; echo
+
+	if [[ -z $noPkgs ]] ; then
+
+		if ! sudo pacman -Sp $pkgsLine --print-format %n &> /dev/null ; then sudo pacman -Sp $pkgsLine --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+		pkgs=$( sudo pacman -Sp $pkgsLine --print-format %n )
+
+	else
+
+		echo "Небыли найдены следующие пакеты ( $noPkgs), установка прерывается _ The ( $noPkgs) packages was not found, installation failed "
+		echo
+
+		sed -i '4s/.*/0/' ~/.tmp-sz ; exit
+
+	fi
+
+	corr=0
+	pkgsCNTAll=0 ; pkgsCl=""
+
+	for pkg in $pkgs ; do 
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $pkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then pkgsCNTAll=$( expr $pkgsCNTAll + 1 ) ; pkgsCl="$pkgsCl$pkg " ; fi
+
+	done
+
+
+
+	if ! sudo pacman -Sp steam-manjaro --print-format %n &> /dev/null ; then sudo pacman -Sp steam-manjaro --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	stmPkgs=$( sudo pacman -Sp steam-manjaro --print-format %n )
+	stmPkgsCNTAll=0 ; stmPkgsCl=""
+
+	for stmPkg in $stmPkgs ; do
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $stmPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then stmPkgsCNTAll=$( expr $stmPkgsCNTAll + 1 ) ; stmPkgsCl="$stmPkgsCl$stmPkg " ; fi
+
+	done
+
+
+
+### download all packages instead AUR
+#-#
+### скачивание общего списка пакетов, пакеты AUR будут устанавливаться отдельно
+
+
+
+	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $mltlDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
+
+	pkgsAll="$updPkgsCl$baseDevelPkgsCl$mltlDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
+
+	cntCurr=0 ; cntErr=0 ; cntErrNames="" ; cntErrDwnl=0 ; cntErrNamesDwnl=""
+
+	partsCnt=0 ; partsPkg="" ; cntCh=0
+
+	for currPkg in $pkgsAll ; do
+
+		cntCh=$( expr $cntCh + 1 )
+
+		partsCnt=$( expr $partsCnt + 1 )
+
+		partsPkg="$partsPkg$currPkg "
+
+		if [[ $partsCnt -eq 20 || $cntCh -eq $cntAll ]] ; then
+
+			echo -en "Загрузка пакетов _ Downloading packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -Sw $partsPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + $partsCnt )
+
+			else
+
+				for errPkg in $partsPkg ; do
+				
+					if ! sudo pacman -Sw $errPkg --noconfirm &> /dev/null ; then
+
+						cntErrDwnl=$( expr $cntErrDwnl + 1 ) ; cntErrNamesDwnl="$cntErrNamesDwnl$errPkg "
+
+					fi
+
+				done
+
+			fi
+
+			partsCnt=0 ; partsPkg=""
+
+		fi
+
+	done
+
+	cntCurr=$( expr $cntCurr + $partsCnt )
+
+	echo -en "Загрузка пакетов _ Downloading packages: $cntAll _ $cntCurr\033[0K\r"
+
+	if [ $cntErrDwnl -ne 0 ] ; then echo ; echo ; echo "Не удалось скачать следующие пакеты _ Failed to download the following packages: ( $cntErrNamesDwnl) " ; echo ; else echo ; echo ; fi
+
+
+
+### install all downloaded packages and updates
+#-#
+### установка всех скачанных пакетов и обновлений
+
+
+
+	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+
+	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+
+	cntCurr=0
+
+	partsCnt=0 ; partsPkg="" ; cntCh=0
+
+	for currPkg in $listOne ; do
+
+		cntCh=$( expr $cntCh + 1 )
+
+		partsCnt=$( expr $partsCnt + 1 )
+
+		partsPkg="$partsPkg$currPkg "
+
+		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntOne ]] ; then
+
+			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + $partsCnt )
+
+			else
+
+				for errPkg in $partsPkg ; do
+				
+					if ! sudo pacman -S $errPkg --noconfirm &> /dev/null ; then
+
+						cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+
+					fi
+
+				done
+
+			fi
+
+			partsCnt=0 ; partsPkg=""
+
+		fi
+
+	done
+
+	cntCurr=$( expr $cntCurr + $partsCnt )
+
+	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+	echo ; echo
+
+
+
+### AUR packages - downloading and installing
+#-#
+### скачивание и установка пакетов из репозитория пользователей ArchLinux
+
+
+
+	fAUR
+
+
+
+### install packages from multilib-devel group
+#-#
+### установка пакетов из группы multilib-devel
+
+
+
+	if ! sudo pacman -Qq gcc-multilib &> /dev/null ; then 
+
+		sudo pacman -Rdd gcc --noconfirm &> /dev/null
+		sudo pacman -Rdd gcc-libs --noconfirm &> /dev/null
+
+		for currPkg in $listTwo ; do
+
+			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -S $currPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + 1 )
+
+			else
+
+				cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+
+			fi
+
+		done
+
+	else
+
+		for currPkg in $listTwo ; do cntCurr=$( expr $cntCurr + 1 ) ; done
+
+	fi
+
+
+
+### install steam
+#-#
+### установка игрового сервиса steam
+
+
+
+	sudo mhwd-gpu --status &> /dev/null
+	sudo mhwd-gpu --check &> /dev/null
+	sudo mhwd-gpu --setlib32 true &> /dev/null
+
+	partsCnt=0 ; partsPkg="" ; cntCh=0
+
+	for currPkg in $listThree ; do
+
+		cntCh=$( expr $cntCh + 1 )
+
+		partsCnt=$( expr $partsCnt + 1 )
+
+		partsPkg="$partsPkg$currPkg "
+
+		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntThree ]] ; then
+
+			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
+
+				cntCurr=$( expr $cntCurr + $partsCnt )
+
+			else
+
+				for errPkg in $partsPkg ; do
+				
+					if ! sudo pacman -S $errPkg --noconfirm &> /dev/null ; then
+
+						cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+
+					fi
+
+				done
+
+			fi
+
+			partsCnt=0 ; partsPkg=""
+
+		fi
+
+	done
+
+	cntCurr=$( expr $cntCurr + $partsCnt )
+
+	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+
+
+
+### end of x64 mobox-sz autobuild script process
+#-#
+### окончание работы скрипта автосборки mobox-sz для 64 битной ОС
+
+
+
+	if [[ $cntErr -eq 0 && $cntErrDwnl -eq 0 ]] ; then 
+
+		fFinalize
+
+		sed -i '4s/.*/0/' ~/.tmp-sz
+		sed -i '5s/.*/1/' ~/.tmp-sz
+
+	else
+
+		echo ; echo
+		echo "Не удалось установить следующие пакеты ( $cntErrNames) _ Failed to install the following packages: ( $cntErrNames) "
+		echo
+
+		echo "Не все обязательные пакеты были установлены, перезапустите скрипт автосборки _ Not all required packages have been installed, restart the autobuild script "
+		echo
+
+		sed -i '4s/.*/0/' ~/.tmp-sz
+
+	fi
+
+
+
+}
+
+
+
+#######################################################################################################
+
+
+
+i=0
+while [[ $( sed '4q;d' ~/.tmp-sz ) == "1" ]] ; do i=$( expr $i + 1 ) ; if [ $i -eq 12 ] ; then sudo -v ; i=0 ; fi ; sleep 10s ; done &
+
+fStart &
+
+
+
+wait
+
+
+
+ii=0 ; val=0
+
+while IFS='' read -r fLine || [[ -n "$fLine" ]] ; do
+
+	ii=$( expr $ii + 1 ) ; if [ $ii -eq 5 ] ; then val=$fLine ; fi
+
+done < ~/.tmp-sz
+
+
+
+if [ $val -eq 1 ] ; then
+
+	echo "Автосборка успешно завершена, перезагрузка _ Installation completed succesfull, rebooting "
+
+	rm -r ~/mobox &> /dev/null
+	rm ~/$usbd &> /dev/null
+	rm ~/.tmp-sz &> /dev/null
+	rm ~/$gen &> /dev/null
+
+	for rbt in {1..10} ; do echo -n "." ; sleep 1s ; done ; reboot
+
+else
+
+	echo "Автосборка не завершена полностью, перезапустите скрипт сборки или проверьте его на наличие ошибок _ Installation is not fully completed, restart the autobuild script or check it for errors "
+
+fi
+
+
+
+echo ; echo ; echo
+
+

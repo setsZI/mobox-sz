@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openbox_menu>
+	<menu id="root-menu" label="OpenBox 3">
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/thunar.svg" label="All programs">
+			<action name="Execute">
+				<execute>thunar /usr/share/applications/</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/octopi.svg" label="Add or remove">
+			<action name="Execute">
+				<execute>octopi</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/utilities-system-monitor.svg" label="Tasks">
+			<action name="Execute">
+				<execute>lxtask</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/terminal.svg" label="Terminal">
+			<action name="Execute">
+				<execute>terminator</execute>
+			</action>
+		</item>
+		<separator/>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/thunar.svg" label="File manager">
+			<action name="Execute">
+				<execute>thunar</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/sunflower.svg" label="File manager">
+			<action name="Execute">
+				<execute>sunflower</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/catfish.svg" label="File search">
+			<action name="Execute">
+				<execute>gksu catfish</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/scalable/libreoffice-main.svg" label="Libreoffice">
+			<action name="Execute">
+				<execute>libreoffice</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/leafpad.svg" label="Leafpad">
+			<action name="Execute">
+				<execute>leafpad</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/gcalculator.svg" label="Calculator">
+			<action name="Execute">
+				<execute>galculator</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/chromium.svg" label="Chromium">
+			<action name="Execute">
+				<execute>chromium</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firefox.svg" label="Firefox">
+			<action name="Execute">
+				<execute>firefox</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/thunderbird.svg" label="Email">
+			<action name="Execute">
+				<execute>thunderbird</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/pidgin.svg" label="Messages">
+			<action name="Execute">
+				<execute>pidgin</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/skype.svg" label="Skype">
+			<action name="Execute">
+				<execute>skype %U</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/steam.svg" label="Steam">
+			<action name="Execute">
+				<execute>env STEAM_RUNTIME=1 /usr/bin/steam %U</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/qbittorrent.svg" label="Torrent client">
+			<action name="Execute">
+				<execute>qbittorrent</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/clementine.svg" label="Audio player">
+			<action name="Execute">
+				<execute>clementine</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/gnome-screenshot.svg" label="Print screen">
+			<action name="Execute">
+				<execute>xfce4-screenshooter</execute>
+			</action>
+		</item>
+		<separator/>
+		<item icon="/usr/share/icons/Menda-Circle/categories/48x48/xfce-utils.svg" label="Autostart">
+			<action name="Execute">
+				<execute>geany ./.config/openbox/autostart</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/obconf.svg" label="Frames themes">
+			<action name="Execute">
+				<execute>obconf</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/cs-cat-appearance.svg" label="Elements themes">
+			<action name="Execute">
+				<execute>lxappearance</execute>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/nitrogen.svg" label="Desktop bkgr">
+			<action name="Execute">
+				<execute>nitrogen</execute>
+			</action>
+		</item>
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="root-menu-75519" label="Panel">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/desktop-environment-lxde.svg" label="LXDE panel">
+				<action name="Execute">
+					<execute>./.config/setsZI/lxOn</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/hicolor/48x48/apps/xfce4-panel-menu.png" label="XFCE panel">
+				<action name="Execute">
+					<execute>./.config/setsZI/xfOn</execute>
+				</action>
+			</item>
+			<separator/>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" label="Panel TINT2">
+				<action name="Execute">
+					<execute>./.config/setsZI/tiOn</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" label="TINT2 settings">
+				<action name="Execute">
+					<execute>tint2conf</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" id="1" label="Menu">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" label="Refresh">
+				<action name="reconfigure"/>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" label="Edit">
+				<action name="Execute">
+					<execute>obmenu</execute>
+				</action>
+			</item>
+			<separator/>
+			<item icon="/usr/share/icons/Menda-Circle/categories/48x48/xfce-utils.svg" label="Config file">
+				<action name="Execute">
+					<execute>geany ./.config/openbox/menu.xml</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="/usr/share/icons/Menda-Circle/categories/48x48/system_section.svg" id="2" label="OS settings">
+			<item icon="/usr/share/icons/hicolor/scalable/apps/manjaro-settings-manager.svg" label="Base settings">
+				<action name="Execute">
+					<execute>gksu manjaro-settings-manager</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/gparted.svg" label="Edit partitions">
+				<action name="Execute">
+					<execute>gksu gparted</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/preferences-desktop-display.svg" label="Screen">
+				<action name="Execute">
+					<execute>lxrandr</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/nvidia-settings.svg" label="NVIDIA props">
+				<action name="Execute">
+					<execute>nvidia-settings</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/wine-winecfg.svg" label="Wine settings">
+				<action name="Execute">
+					<execute>winecfg</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="//usr/share/icons/hicolor/48x48/apps/compton.png" id="root-menu-73237" label="Desktop effects">
+			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="On">
+				<action name="Execute">
+					<execute>./.config/setsZI/cmpEffOn</execute>
+				</action>
+			</item>
+			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="Off">
+				<action name="Execute">
+					<execute>./.config/setsZI/cmpEffOff</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" id="3" label="Boot USB">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" label="ImageWriter">
+				<action name="Execute">
+					<execute>imagewriter</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/multisystem.svg" label="MultiSystem">
+				<action name="Execute">
+					<execute>/usr/local/share/multisystem/gui_multisystem.sh</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/help-about.svg" id="4" label="Help and info">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/hardinfo.svg" label="System info">
+				<action name="Execute">
+					<execute>hardinfo</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/xsensors.svg" label="Termal params">
+				<action name="Execute">
+					<execute>xsensors</execute>
+				</action>
+			</item>
+		</menu>
+		<separator/>
+		<item icon="/usr/share/icons/Menda-Circle/actions/scalable/system-log-out.svg" label="Exit">
+			<action name="Execute">
+				<command>openbox --exit</command>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/actions/scalable/system-reboot.svg" label="Reboot">
+			<action name="Execute">
+				<command>systemctl reboot</command>
+			</action>
+		</item>
+		<item icon="/usr/share/icons/Menda-Circle/actions/scalable/system-shutdown.svg" label="Off">
+			<action name="Execute">
+				<command>systemctl poweroff</command>
+			</action>
+		</item>
+	</menu>
+</openbox_menu>
