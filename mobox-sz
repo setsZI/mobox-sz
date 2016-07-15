@@ -90,10 +90,6 @@ if [ ! -f ~/.tmp-sz ] ; then
 		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
 		echo ; echo ; exit
 
-	else
-
-		rzltCode="$osLang";
-
 	fi
 
 
@@ -123,10 +119,6 @@ if [ ! -f ~/.tmp-sz ] ; then
 		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
 		echo ; echo ; exit
 
-	else
-
-		rzltCode="$rzltCode$osBit"
-
 	fi
 
 	echo
@@ -147,10 +139,6 @@ if [ ! -f ~/.tmp-sz ] ; then
 		echo "Неверно указанный вариант, требуется 1 или 2 _ Wrong option selected, 1 or 2 needed "
 		echo ; echo ; exit
 
-	else
-
-		rzltCode="$rzltCode$osVid"
-
 	fi
 
 	echo
@@ -163,13 +151,7 @@ if [ ! -f ~/.tmp-sz ] ; then
 	echo "0" >> ~/.tmp-sz
 	echo "0" >> ~/.tmp-sz
 
-	rzltCode=0
-
 	mkdir ~/.originalOSFiles-sz &> /dev/null
-
-else
-
-	rzltCode=1
 
 fi
 
@@ -207,15 +189,7 @@ if [ $osLang -eq 1 ] ; then
 		echo
 		reboot
 
-	else
-
-		if [ $scRun -eq 0 ] ; then rzltCode=0 ; fi
-
 	fi
-
-else
-
-	if [ $scRun -eq 0 ] ; then rzltCode=0 ; fi
 
 fi
 
@@ -515,18 +489,14 @@ fX32 () {
 
 
 
-	if [ $rzltCode -eq 0 ] ; then
+	echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
+	echo
+	sudo pacman-mirrors -g &> /dev/null
 
-		echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
-		echo
-		sudo pacman-mirrors -g &> /dev/null
-
-		echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-		echo
-		sudo pacman-key --refresh-keys &> /dev/null
-		sudo pacman -S gnupg --noconfirm &> /dev/null
-
-	fi
+	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+	echo
+	sudo pacman-key --refresh-keys &> /dev/null
+	sudo pacman -S gnupg --noconfirm &> /dev/null
 
 	echo "Синхронизация репозиториев _ Synchronizing repositories "
 	echo
@@ -812,18 +782,14 @@ fX64 () {
 
 
 
-	if [ $rzltCode -eq 0 ] ; then
+	echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
+	echo
+	sudo pacman-mirrors -g &> /dev/null
 
-		echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
-		echo
-		sudo pacman-mirrors -g &> /dev/null
-
-		echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-		echo
-		sudo pacman-key --refresh-keys &> /dev/null
-		sudo pacman -S gnupg --noconfirm &> /dev/null
-
-	fi
+	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+	echo
+	sudo pacman-key --refresh-keys &> /dev/null
+	sudo pacman -S gnupg --noconfirm &> /dev/null
 
 	echo "Синхронизация репозиториев _ Synchronizing repositories "
 	echo
