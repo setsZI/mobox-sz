@@ -264,8 +264,19 @@ fFinalize () {
 
 	fListR="/etc/locale.conf /etc/locale.gen /etc/X11/xorg.conf.d/50-mouse-acceleration.conf "
 
-	for i in $fListH ; do fName="${i##*/}" ; cp ~/$i ~/.originalOSFiles-sz/$fName &> /dev/null ; done
-	for i in $fListR ; do fName="${i##*/}" ; cp $i ~/.originalOSFiles-sz/$fName &> /dev/null ; done
+	for i in $fListH ; do 
+
+		fName="${i##*/}"
+		if [ ! -f ~/.originalOSFiles-sz/$fName ] ; then cp ~/$i ~/.originalOSFiles-sz/$fName &> /dev/null ; fi
+
+	done
+
+	for i in $fListR ; do 
+
+		fName="${i##*/}"
+		if [ ! -f ~/.originalOSFiles-sz/$fName ] ; then cp $i ~/.originalOSFiles-sz/$fName &> /dev/null ; fi
+
+	done
 
 
 
@@ -289,6 +300,7 @@ fFinalize () {
 	sudo cp ~/mobox/cfgf-os/tint2rc /usr/share/tint2/mobox-sz.tint2rc
 	cp ~/mobox/cfgf-os/index.theme ~/.icons/default/index.theme
 	cp ~/mobox/cfgf-os/oragerc ~/.config/orage/oragerc
+	cp ~/mobox/cfgf-os/panel ~/.config/lxpanel/default/panels/panel
 
 	if [ $osLang -eq 1 ] ; then cp ~/mobox/cfgf-os/menu-RU.xml ~/.config/openbox/menu.xml ; fi
 	if [ $osLang -eq 2 ] ; then cp ~/mobox/cfgf-os/menu-EN.xml ~/.config/openbox/menu.xml ; fi
@@ -298,7 +310,6 @@ fFinalize () {
 	if [ $osLang -eq 2 ] ; then sudo cp ~/mobox/cfgf-os/locale-EN.gen /etc/locale.gen ; fi
 
 	sudo cp ~/mobox/cfgf-os/50-mouse-acceleration.conf /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
-	cp ~/mobox/cfgf-os/panel ~/.config/lxpanel/default/panels/panel
 
 	cp ~/mobox/cfgf-sz/autostartTiC1 ~/.config/openbox/autostart
 
