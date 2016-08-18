@@ -72,9 +72,9 @@
 				<execute>pidgin</execute>
 			</action>
 		</item>
-		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/skype.svg" label="Skype">
+		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/ekiga.svg" label="Ekiga">
 			<action name="Execute">
-				<execute>skype %U</execute>
+				<execute>ekiga</execute>
 			</action>
 		</item>
 		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/steam.svg" label="Steam">
