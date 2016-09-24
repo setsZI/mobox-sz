@@ -5,16 +5,21 @@
 
 
 
+# The MIT License (MIT)
+# Copyright (c) 2016 setsZI
+# YouTube http://www.youtube.com/c/setsZI
+
+
+
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.0"
-scriptReadyDate="10/07/2016"
+scriptVers="2.0.1"
 osBaseName="Manjaro NET"
-osBaseVers="16.06.1"
+osBaseVers="16.08"
 osBaseBit=$( uname -m )
 osResultName="Manjaro Openbox Current"
 osResultLang="RU EN"
-autobuildStartComment="$osResultName autobuild script MOBOX-SZ $scriptVers"
+autobuildStartComment="$osResultName autobuild script MOBOX-SZ $scriptVers "
 
 
 
@@ -376,12 +381,9 @@ fFinalize () {
 	cp ~/mobox/cfgf-os/psd.conf ~/.config/psd/psd.conf
 	systemctl --user enable psd.service &> /dev/null
 
+
+
 #	yes | sudo mhwd-kernel -i linux44 rmc &> /dev/null
-
-
-
-	echo "Обновление загрузчика GRUB _ Update the GRUB loader "
-	sudo update-grub &> /dev/null
 
 
 
@@ -390,8 +392,8 @@ fFinalize () {
 
 	if [ $osVid -eq 2 ] ; then
 
-		echo
 		echo "Установка проприетарного видеодрайвера _ Installig proprietary video driver "
+		echo
 
 		sudo mhwd -f -i pci video-nvidia-340xx &> /dev/null
 
@@ -400,6 +402,10 @@ fFinalize () {
 
 	fi
 
+
+
+	echo "Обновление загрузчика GRUB _ Update the GRUB loader "
+	sudo update-grub &> /dev/null
 	echo
 
 
@@ -418,7 +424,7 @@ fAUR () {
 
 	AURlistOne="gxkb ttf-ms-fonts ttf-tahoma profile-sync-daemon pnmixer multisystem"
 
-	if [ $osBit -eq 2 ] ; then AURlistOne="$AURlistOne chromium-pepper-flash " ; else AURlistOne="$AURlistOne " ; fi
+	if [ $osBit -eq 2 ] ; then AURlistOne="$AURlistOne pepper-flash " ; else AURlistOne="$AURlistOne " ; fi
 
 	AURlistTwo="delorean-dark-themes-3.8 dorian-flat openbox-shiki-colors-themes mint-x-theme "
 
@@ -514,6 +520,14 @@ fX32 () {
 	sudo pacman -Syy --noconfirm &> /dev/null
 
 	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
+
+
+
+	echo "Установка обновлений _ Installing updates "
+	echo
+	sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
+	sudo pacman -Su --noconfirm
 	echo
 
 
@@ -683,15 +697,17 @@ fX32 () {
 
 
 
-### install all downloaded packages and updates
+### install all downloaded packages
 #-#
-### установка всех скачанных пакетов и обновлений
+### установка всех скачанных пакетов
 
 
 
-	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+#	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
 
-	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+#	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
 
 	cntCurr=0
 
@@ -807,6 +823,14 @@ fX64 () {
 	sudo pacman -Syy --noconfirm &> /dev/null
 
 	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
+
+
+
+	echo "Установка обновлений _ Installing updates "
+	echo
+	sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
+	sudo pacman -Su --noconfirm
 	echo
 
 
@@ -1014,15 +1038,17 @@ fX64 () {
 
 
 
-### install all downloaded packages and updates
+### install all downloaded packages
 #-#
-### установка всех скачанных пакетов и обновлений
+### установка всех скачанных пакетов
 
 
 
-	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+#	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
 
-	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+#	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
 
 	cntCurr=0
 
