@@ -51,9 +51,9 @@ if echo "$sudoPsw" | sudo -Sv -p "" &> /dev/null ; then echo "Пароль ве�
 
 echo ; echo
 
-echo "|######### MOBOX-SZ script 2.0.0 for MANJARO NET 16.06.1 #########|"
-echo "|                                                                 |"
-echo "|_________________________________________________________________|"
+echo "|######### MOBOX-SZ script $scriptVers for MANJARO NET $osBaseVers #########|"
+echo "|                                                               |"
+echo "|_______________________________________________________________|"
 
 echo ; echo
 
