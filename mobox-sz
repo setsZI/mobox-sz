@@ -13,7 +13,7 @@
 
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.1"
+scriptVers="2.0.3"
 osBaseName="Manjaro NET"
 osBaseVers="16.08"
 osBaseBit=$( uname -m )
@@ -28,7 +28,7 @@ gen="UCVLHP"
 
 
 
-pkgsLine="thunar thunar-volman thunar-media-tags-plugin thunar-archive-plugin parcellite menda-themes menda-themes-dark lxdm lxinput lxtask tint2 tintwizard lxappearance lxrandr file-roller qpdfview gnome-themes-standard hardinfo firefox chromium thunderbird vlc nitrogen manjaro-settings-manager wine wine-mono wine_gecko samba gnome-alsamixer xsensors viewnior gpicview menumaker obmenu obmenu-generator openbox obconf openbox-themes octopi gksu xterm gparted geany menda-circle-icon-theme xcursor-simpleandsoft jdk8-openjdk terminator gnome-terminal lxterminal manjaro-artwork-openbox manjaro-users-artwork-wallpapers manjarobox-artwork git galculator clementine gstreamer0.10-bad-plugins gstreamer0.10-base-plugins gstreamer0.10-good-plugins gstreamer0.10-ugly-plugins gst-plugins-bad gst-plugins-ugly gst-libav qbittorrent pidgin compton libreoffice-fresh-ru leafpad tumbler ffmpegthumbnailer network-manager-applet xfce4-notifyd perl-file-mimeinfo xcursor-bluecurve xcursor-breeze xcursor-menda xfce4-screenshooter orage pulseaudio ekiga catfish imagewriter sunflower lxpanel"
+pkgsLine="thunar thunar-volman thunar-media-tags-plugin thunar-archive-plugin parcellite menda-themes menda-themes-dark lxdm lxinput lxtask tint2 tintwizard lxappearance lxrandr file-roller qpdfview gnome-themes-standard hardinfo firefox chromium thunderbird vlc nitrogen manjaro-settings-manager wine wine-mono wine_gecko samba gnome-alsamixer xsensors viewnior gpicview menumaker obmenu obmenu-generator openbox obconf openbox-themes octopi gksu xterm gparted geany menda-circle-icon-theme xcursor-simpleandsoft jdk8-openjdk terminator gnome-terminal lxterminal manjaro-artwork-openbox manjaro-users-artwork-wallpapers manjarobox-artwork git galculator clementine gstreamer0.10-bad-plugins gstreamer0.10-base-plugins gstreamer0.10-good-plugins gstreamer0.10-ugly-plugins gst-plugins-bad gst-plugins-ugly gst-libav qbittorrent pidgin compton libreoffice-fresh-ru leafpad tumbler ffmpegthumbnailer network-manager-applet xfce4-notifyd perl-file-mimeinfo xcursor-bluecurve xcursor-breeze xcursor-menda xfce4-screenshooter orage pulseaudio ekiga catfish imagewriter sunflower lxpanel sshguard"
 
 
 
@@ -186,11 +186,14 @@ if [ $osLang -eq 1 ] ; then
 		sudo cp /etc/vconsole.conf ~/.originalOSFiles-sz/vconsole.conf
 		sudo cp ~/mobox/cfgf-os/vconsole.conf /etc/vconsole.conf
 		echo
-		echo "Setting up russian font for console [ OK ] "
+		echo "Настройка русского языка для консоли _ Setting up russian font for console "
 		echo
-		echo "Reboot is required "
-		echo -n "Rebooting in 5 seconds "
-		for i in {1..5} ; do echo -n "." ; sleep 1s ; done
+		echo "Требуется перезагрузка _ Reboot is required "
+		echo
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo
+		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
+		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
 		echo
 		reboot
 
@@ -329,6 +332,8 @@ fFinalize () {
 	cp ~/mobox/cfgf-sz/lxOn ~/.config/mobox-sz/lxOn
 	cp ~/mobox/cfgf-sz/tiOn ~/.config/mobox-sz/tiOn
 	cp ~/mobox/cfgf-sz/xfOn ~/.config/mobox-sz/xfOn
+	cp ~/mobox/cfgf-sz/iptStart ~/.config/mobox-sz/iptStart
+	cp ~/mobox/cfgf-sz/iptStop ~/.config/mobox-sz/iptStop
 
 
 
@@ -366,16 +371,22 @@ fFinalize () {
 	chmod 0755 ~/.config/mobox-sz/lxOn
 	chmod 0755 ~/.config/mobox-sz/tiOn
 	chmod 0755 ~/.config/mobox-sz/xfOn
+	chmod 0755 ~/.config/mobox-sz/iptStart
+	chmod 0755 ~/.config/mobox-sz/iptStop
 
 
 
 	gconftool-2 --set --type boolean /apps/gksu/sudo-mode true
 	sudo cp /etc/samba/smb.conf.default /etc/samba/smb.conf &> /dev/null
 
+
+
 	sudo locale-gen &> /dev/null
 
 	if [ $osLang -eq 1 ] ; then sudo localectl set-locale LANG=ru_RU.UTF-8 &> /dev/null ; fi
 	if [ $osLang -eq 2 ] ; then sudo localectl set-locale LANG=en_US.UTF-8 &> /dev/null ; fi
+
+
 
 	psd &> /dev/null
 	cp ~/mobox/cfgf-os/psd.conf ~/.config/psd/psd.conf
@@ -406,6 +417,12 @@ fFinalize () {
 
 	echo "Обновление загрузчика GRUB _ Update the GRUB loader "
 	sudo update-grub &> /dev/null
+	echo
+
+
+
+	echo "Включение межсетевого эрана _ Enable firewall program "
+	sudo ./.config/mobox-sz/iptStart
 	echo
 
 
@@ -510,31 +527,15 @@ fX32 () {
 	echo
 	sudo pacman-mirrors -g &> /dev/null
 
-	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-	echo
-	sudo pacman-key --refresh-keys &> /dev/null
+#	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+#	echo
+#	sudo pacman-key --refresh-keys &> /dev/null
+
 	sudo pacman -S gnupg --noconfirm &> /dev/null
 
 	echo "Синхронизация репозиториев _ Synchronizing repositories "
 	echo
 	sudo pacman -Syy --noconfirm &> /dev/null
-
-	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
-	echo
-
-
-
-	echo "Установка обновлений _ Installing updates "
-	echo
-	sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-	sudo pacman -Su --noconfirm
-	echo
-
-
-
-### prepare the list of all packages and updates for install
-#-#
-### подготовка общего списка пакетов для установки, в том числе и всех обновлений
 
 
 
@@ -551,6 +552,35 @@ fX32 () {
 		if [ $corr -eq 1 ] ; then updPkgsCNTAll=$( expr $updPkgsCNTAll + 1 ) ; updPkgsCl="$updPkgsCl$updPkg " ; fi
 
 	done
+
+	if [ $updPkgsCNTAll -ne 0 ] ; then
+
+		echo "Установка обновлений _ Installing updates "
+		echo
+		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
+		sudo pacman -Su --noconfirm
+		echo
+		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
+		echo
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo
+		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
+		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
+		echo
+		reboot
+
+	fi
+
+
+
+### prepare the list of all packages to install
+#-#
+### подготовка общего списка пакетов для установки
+
+
+
+	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
 
 
 
@@ -813,31 +843,15 @@ fX64 () {
 	echo
 	sudo pacman-mirrors -g &> /dev/null
 
-	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-	echo
-	sudo pacman-key --refresh-keys &> /dev/null
+#	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
+#	echo
+#	sudo pacman-key --refresh-keys &> /dev/null
+
 	sudo pacman -S gnupg --noconfirm &> /dev/null
 
 	echo "Синхронизация репозиториев _ Synchronizing repositories "
 	echo
 	sudo pacman -Syy --noconfirm &> /dev/null
-
-	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
-	echo
-
-
-
-	echo "Установка обновлений _ Installing updates "
-	echo
-	sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-	sudo pacman -Su --noconfirm
-	echo
-
-
-
-### prepare the list of all packages and updates for install
-#-#
-### подготовка общего списка пакетов для установки, в том числе и всех обновлений
 
 
 
@@ -854,6 +868,35 @@ fX64 () {
 		if [ $corr -eq 1 ] ; then updPkgsCNTAll=$( expr $updPkgsCNTAll + 1 ) ; updPkgsCl="$updPkgsCl$updPkg " ; fi
 
 	done
+
+	if [ $updPkgsCNTAll -ne 0 ] ; then
+
+		echo "Установка обновлений _ Installing updates "
+		echo
+		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
+		sudo pacman -Su --noconfirm
+		echo
+		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
+		echo
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo
+		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
+		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
+		echo
+		reboot
+
+	fi
+
+
+
+### prepare the list of all packages to install
+#-#
+### подготовка общего списка пакетов для установки
+
+
+
+	echo "Формирование списка пакетов для установки _ Preparing the list of packages to be installed "
+	echo
 
 
 
@@ -1235,7 +1278,7 @@ fX64 () {
 
 
 i=0
-while [[ $( sed '4q;d' ~/.tmp-sz ) == "1" ]] ; do i=$( expr $i + 1 ) ; if [ $i -eq 12 ] ; then sudo -v ; i=0 ; fi ; sleep 10s ; done &
+while [[ $( sed '4q;d' ~/.tmp-sz ) == "1" ]] ; do i=$( expr $i + 1 ) ; if [ $i -eq 12 ] ; then sudo -v &> /dev/null ; i=0 ; fi ; sleep 10s ; done &
 
 fStart &
 
@@ -1264,7 +1307,7 @@ if [ $val -eq 1 ] ; then
 	rm ~/.tmp-sz &> /dev/null
 	rm ~/$gen &> /dev/null
 
-	for rbt in {1..10} ; do echo -n "." ; sleep 1s ; done ; reboot
+	for rbt in {1..10} ; do echo -n "." ; sleep 1s ; done ; echo ; reboot
 
 else
 
