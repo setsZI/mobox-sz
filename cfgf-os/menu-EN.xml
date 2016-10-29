@@ -34,7 +34,7 @@
 		</item>
 		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/catfish.svg" label="File search">
 			<action name="Execute">
-				<execute>gksu catfish</execute>
+				<execute>/usr/bin/catfish</execute>
 			</action>
 		</item>
 		<item icon="/usr/share/icons/Menda-Circle/apps/scalable/libreoffice-main.svg" label="Libreoffice">
@@ -118,7 +118,7 @@
 				<execute>nitrogen</execute>
 			</action>
 		</item>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="root-menu-75519" label="Panel">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="1" label="Panel">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/desktop-environment-lxde.svg" label="LXDE panel">
 				<action name="Execute">
 					<execute>./.config/mobox-sz/lxOn</execute>
@@ -141,7 +141,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" id="1" label="Menu">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" id="2" label="Menu">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" label="Refresh">
 				<action name="reconfigure"/>
 			</item>
@@ -157,7 +157,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/categories/48x48/system_section.svg" id="2" label="OS settings">
+		<menu icon="/usr/share/icons/Menda-Circle/categories/48x48/system_section.svg" id="3" label="OS settings">
 			<item icon="/usr/share/icons/hicolor/scalable/apps/manjaro-settings-manager.svg" label="Base settings">
 				<action name="Execute">
 					<execute>gksu manjaro-settings-manager</execute>
@@ -184,7 +184,19 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="//usr/share/icons/hicolor/48x48/apps/compton.png" id="root-menu-73237" label="Desktop effects">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" id="4" label="Firewall">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" label="On">
+				<action name="Execute">
+					<execute>gksu ./.config/mobox-sz/iptStart</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" label="Off">
+				<action name="Execute">
+					<execute>gksu ./.config/mobox-sz/iptStop</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="//usr/share/icons/hicolor/48x48/apps/compton.png" id="5" label="Desktop effects">
 			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="On">
 				<action name="Execute">
 					<execute>./.config/mobox-sz/cmpEffOn</execute>
@@ -196,7 +208,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" id="3" label="Boot USB">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" id="6" label="Boot USB">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" label="ImageWriter">
 				<action name="Execute">
 					<execute>imagewriter</execute>
@@ -208,7 +220,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/help-about.svg" id="4" label="Help and info">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/help-about.svg" id="7" label="Help and info">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/hardinfo.svg" label="System info">
 				<action name="Execute">
 					<execute>hardinfo</execute>
@@ -231,7 +243,7 @@
 				<command>systemctl reboot</command>
 			</action>
 		</item>
-		<item icon="/usr/share/icons/Menda-Circle/actions/scalable/system-shutdown.svg" label="Off">
+		<item icon="/usr/share/icons/Menda-Circle/actions/scalable/system-shutdown.svg" label="Power off">
 			<action name="Execute">
 				<command>systemctl poweroff</command>
 			</action>

@@ -34,7 +34,7 @@
 		</item>
 		<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/catfish.svg" label="Поиск файлов">
 			<action name="Execute">
-				<execute>gksu catfish</execute>
+				<execute>/usr/bin/catfish</execute>
 			</action>
 		</item>
 		<item icon="/usr/share/icons/Menda-Circle/apps/scalable/libreoffice-main.svg" label="Офис">
@@ -118,7 +118,7 @@
 				<execute>nitrogen</execute>
 			</action>
 		</item>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="root-menu-75519" label="Панель состояний">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/tint2conf.svg" id="1" label="Панель состояний">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/desktop-environment-lxde.svg" label="Включить LXDE панель">
 				<action name="Execute">
 					<execute>./.config/mobox-sz/lxOn</execute>
@@ -141,7 +141,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" id="1" label="Главное меню">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" id="2" label="Главное меню">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/menu-editor.svg" label="Обновить">
 				<action name="reconfigure"/>
 			</item>
@@ -157,7 +157,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/categories/48x48/system_section.svg" id="2" label="Настройка ОС">
+		<menu icon="/usr/share/icons/Menda-Circle/categories/48x48/system_section.svg" id="3" label="Настройка ОС">
 			<item icon="/usr/share/icons/hicolor/scalable/apps/manjaro-settings-manager.svg" label="Основная настройка">
 				<action name="Execute">
 					<execute>gksu manjaro-settings-manager</execute>
@@ -184,19 +184,31 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="//usr/share/icons/hicolor/48x48/apps/compton.png" id="root-menu-73237" label="Эффекты раб. ст.">
-			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="Вкл.">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" id="4" label="Межсетевой экран">
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" label="Вкл.">
+				<action name="Execute">
+					<execute>gksu ./.config/mobox-sz/iptStart</execute>
+				</action>
+			</item>
+			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/firewall.svg" label="Выкл.">
+				<action name="Execute">
+					<execute>gksu ./.config/mobox-sz/iptStop</execute>
+				</action>
+			</item>
+		</menu>
+		<menu icon="/usr/share/icons/hicolor/48x48/apps/compton.png" id="5" label="Эффекты раб. ст.">
+			<item icon="/usr/share/icons/hicolor/48x48/apps/compton.png" label="Вкл.">
 				<action name="Execute">
 					<execute>./.config/mobox-sz/cmpEffOn</execute>
 				</action>
 			</item>
-			<item icon="//usr/share/icons/hicolor/48x48/apps/compton.png" label="Выкл.">
+			<item icon="/usr/share/icons/hicolor/48x48/apps/compton.png" label="Выкл.">
 				<action name="Execute">
 					<execute>./.config/mobox-sz/cmpEffOff</execute>
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" id="3" label="Флешка">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" id="6" label="Флешка">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/imagewriter.svg" label="boot Флешка ImageWriter">
 				<action name="Execute">
 					<execute>imagewriter</execute>
@@ -208,7 +220,7 @@
 				</action>
 			</item>
 		</menu>
-		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/help-about.svg" id="4" label="Сведения, помощь">
+		<menu icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/help-about.svg" id="7" label="Сведения, помощь">
 			<item icon="/usr/share/icons/Menda-Circle/apps/48x48/apps/hardinfo.svg" label="О системе">
 				<action name="Execute">
 					<execute>hardinfo</execute>
