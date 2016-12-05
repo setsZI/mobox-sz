@@ -19,6 +19,6 @@ Installation:
 
 The autobuild process is not working with WIFI yet
 
-
+To install proprietary driver for ATI cards - first of all choose free video driver in autobuild process and when the process will be finished - install proprietary video driver from MSM (Manjaro Settings Manager) or with mhwd command
 
 
