@@ -1,7 +1,9 @@
 
 
 
-Manjaro Openbox Current autobuild script for Manjaro NET 16.08
+Manjaro Openbox autobuild script for Manjaro NET 16.08
+
+Current version 2.0.4
 
 
 Installation:
@@ -16,5 +18,7 @@ Installation:
   
 
 The autobuild process is not working with WIFI yet
+
+
 
 
