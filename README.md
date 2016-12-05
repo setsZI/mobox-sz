@@ -8,7 +8,7 @@ Current version 2.0.4
 
 Installation:
 
-  1. install Manjaro NET 16.08 distro ( before install prepare partitions from live USB GParted or some else program or you can edit partitions from cli-installer, on your preference )
+  1. install Manjaro NET 16.08 distro ( before install prepare partitions from live USB with GParted or some else program or you can edit partitions from cli-installer, on your preference )
   2. after rebooting login by your user
   3. get this autobuild script with command ( wget goo.gl/UCVLHP )
   4. set premission to 0755 with command ( chmod 0755 UCVLHP )
