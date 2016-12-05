@@ -13,7 +13,7 @@
 
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.3"
+scriptVers="2.0.4"
 osBaseName="Manjaro NET"
 osBaseVers="16.08"
 osBaseBit=$( uname -m )
@@ -59,18 +59,6 @@ echo ; echo
 
 
 
-if sudo pacman -Si screenfetch &> /dev/null ; then
-
-	if ! sudo pacman -Qq screenfetch &> /dev/null ; then sudo pacman -S screenfetch --noconfirm &> /dev/null ; fi
-
-	screenfetch
-
-fi
-
-echo
-
-
-
 ### creating if wasn't created file for saving installation settings
 #-#
 ### создаем файл для сохранения параметров установки если он еще небыл создан
@@ -78,6 +66,20 @@ echo
 
 
 if [ ! -f ~/.tmp-sz ] ; then
+
+	echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
+	echo
+	sudo pacman-mirrors -g &> /dev/null
+
+	echo "Синхронизация репозиториев _ Synchronizing repositories "
+	echo
+	sudo pacman -Syy --noconfirm
+	echo ; echo
+	
+	sudo pacman -S manjaro-keyring archlinux-keyring --noconfirm &> /dev/null
+	sudo pacman -S screenfetch --noconfirm &> /dev/null
+	
+	screenfetch ; echo
 
 
 
@@ -158,6 +160,10 @@ if [ ! -f ~/.tmp-sz ] ; then
 
 	mkdir ~/.originalOSFiles-sz &> /dev/null
 
+else
+
+	screenfetch ; echo
+
 fi
 
 
@@ -190,7 +196,7 @@ if [ $osLang -eq 1 ] ; then
 		echo
 		echo "Требуется перезагрузка _ Reboot is required "
 		echo
-		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
 		echo
 		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
 		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
@@ -303,7 +309,7 @@ fFinalize () {
 	cp ~/mobox/cfgf-os/uca.xml ~/.config/Thunar/uca.xml
 	cp ~/mobox/cfgf-os/settings.ini ~/.config/gtk-3.0/settings.ini
 	cp ~/mobox/cfgf-os/.gtkrc-2.0 ~/.gtkrc-2.0
-	cp ~/mobox/cfgf-os/.Xresources ~/.Xresources
+#	cp ~/mobox/cfgf-os/.Xresources ~/.Xresources
 	cp ~/mobox/cfgf-os/tint2rc ~/.config/tint2/tint2rc
 	sudo cp ~/mobox/cfgf-os/tint2rc /usr/share/tint2/mobox-sz.tint2rc
 	cp ~/mobox/cfgf-os/index.theme ~/.icons/default/index.theme
@@ -334,6 +340,16 @@ fFinalize () {
 	cp ~/mobox/cfgf-sz/xfOn ~/.config/mobox-sz/xfOn
 	cp ~/mobox/cfgf-sz/iptStart ~/.config/mobox-sz/iptStart
 	cp ~/mobox/cfgf-sz/iptStop ~/.config/mobox-sz/iptStop
+
+
+
+	if ! sudo pacman -Qq numix-themes-archblue-git &> /dev/null ; then
+
+		cp ~/mobox/cfgf-os/elses/rc.xml ~/.config/openbox/rc.xml
+		cp ~/mobox/cfgf-os/elses/settings.ini ~/.config/gtk-3.0/settings.ini
+		cp ~/mobox/cfgf-os/elses/.gtkrc-2.0 ~/.gtkrc-2.0
+
+	fi
 
 
 
@@ -377,7 +393,6 @@ fFinalize () {
 
 
 	gconftool-2 --set --type boolean /apps/gksu/sudo-mode true
-	sudo cp /etc/samba/smb.conf.default /etc/samba/smb.conf &> /dev/null
 
 
 
@@ -389,7 +404,6 @@ fFinalize () {
 
 
 	psd &> /dev/null
-	cp ~/mobox/cfgf-os/psd.conf ~/.config/psd/psd.conf
 	systemctl --user enable psd.service &> /dev/null
 
 
@@ -406,7 +420,7 @@ fFinalize () {
 		echo "Установка проприетарного видеодрайвера _ Installig proprietary video driver "
 		echo
 
-		sudo mhwd -f -i pci video-nvidia-340xx &> /dev/null
+		sudo mhwd -i pci video-nvidia &> /dev/null
 
 		sudo mhwd-gpu --check &> /dev/null
 		sudo mhwd-gpu --status &> /dev/null
@@ -416,13 +430,14 @@ fFinalize () {
 
 
 	echo "Обновление загрузчика GRUB _ Update the GRUB loader "
-	sudo update-grub &> /dev/null
+	echo
+	sudo update-grub
 	echo
 
 
 
 	echo "Включение межсетевого эрана _ Enable firewall program "
-	sudo ./.config/mobox-sz/iptStart
+	sudo ./.config/mobox-sz/iptStart &> /dev/null
 	echo
 
 
@@ -443,7 +458,7 @@ fAUR () {
 
 	if [ $osBit -eq 2 ] ; then AURlistOne="$AURlistOne pepper-flash " ; else AURlistOne="$AURlistOne " ; fi
 
-	AURlistTwo="delorean-dark-themes-3.8 dorian-flat openbox-shiki-colors-themes mint-x-theme "
+	AURlistTwo="openbox-shiki-colors-themes numix-themes-archblue-git "
 
 	AURlistAll="$AURlistOne$AURlistTwo" ; AURafterCheck=""
 
@@ -523,22 +538,6 @@ fX32 () {
 
 
 
-	echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
-	echo
-	sudo pacman-mirrors -g &> /dev/null
-
-#	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-#	echo
-#	sudo pacman-key --refresh-keys &> /dev/null
-
-	sudo pacman -S gnupg --noconfirm &> /dev/null
-
-	echo "Синхронизация репозиториев _ Synchronizing repositories "
-	echo
-	sudo pacman -Syy --noconfirm &> /dev/null
-
-
-
 	if ! sudo pacman -Sup --print-format %n &> /dev/null ; then sudo pacman -Sup --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
 
 	corr=0
@@ -553,6 +552,8 @@ fX32 () {
 
 	done
 
+
+
 	if [ $updPkgsCNTAll -ne 0 ] ; then
 
 		echo "Установка обновлений _ Installing updates "
@@ -562,7 +563,7 @@ fX32 () {
 		echo
 		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
 		echo
-		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
 		echo
 		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
 		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
@@ -839,22 +840,6 @@ fX64 () {
 
 
 
-	echo "Поиск наиболее быстрого сервера _ Searching for the speedest server "
-	echo
-	sudo pacman-mirrors -g &> /dev/null
-
-#	echo "Обновление списка ключей доверия _ Updating the list of trusted keys "
-#	echo
-#	sudo pacman-key --refresh-keys &> /dev/null
-
-	sudo pacman -S gnupg --noconfirm &> /dev/null
-
-	echo "Синхронизация репозиториев _ Synchronizing repositories "
-	echo
-	sudo pacman -Syy --noconfirm &> /dev/null
-
-
-
 	if ! sudo pacman -Sup --print-format %n &> /dev/null ; then sudo pacman -Sup --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
 
 	corr=0
@@ -869,6 +854,8 @@ fX64 () {
 
 	done
 
+
+
 	if [ $updPkgsCNTAll -ne 0 ] ; then
 
 		echo "Установка обновлений _ Installing updates "
@@ -878,7 +865,7 @@ fX64 () {
 		echo
 		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
 		echo
-		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebootin run again ./$gen command by your user "
+		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
 		echo
 		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
 		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
