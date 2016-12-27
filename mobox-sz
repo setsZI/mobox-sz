@@ -13,7 +13,7 @@
 
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.4"
+scriptVers="2.0.5"
 osBaseName="Manjaro NET"
 osBaseVers="16.08"
 osBaseBit=$( uname -m )
@@ -678,9 +678,11 @@ fX32 () {
 
 
 
-	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
+#	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
+	cntAll=$(expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
 
-	pkgsAll="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
+#	pkgsAll="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
+	pkgsAll="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
 
 	cntCurr=0 ; cntErr=0 ; cntErrNames="" ; cntErrDwnl=0 ; cntErrNamesDwnl=""
 
@@ -737,10 +739,18 @@ fX32 () {
 
 
 #	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
-	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+#	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+	listOne="$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
 
 #	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
-	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+#	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+	listCntOne=$pkgsCNTAll ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+
+
+
+	sudo pacman -S base-devel --noconfirm ; echo ; sudo pacman -S yaourt --noconfirm ; echo ; sudo pacman -S steam-manjaro --noconfirm ; echo
+
+
 
 	cntCurr=0
 
@@ -756,7 +766,8 @@ fX32 () {
 
 		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntOne ]] ; then
 
-			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+			echo -en "Установка пакетов _ Installing packages: $listCntOne _ $cntCurr\033[0K\r"
 
 			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
 
@@ -784,7 +795,8 @@ fX32 () {
 
 	cntCurr=$( expr $cntCurr + $partsCnt )
 
-	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+	echo -en "Установка пакетов _ Installing packages: $listCntOne _ $cntCurr\033[0K\r"
 
 	echo ; echo
 
@@ -806,8 +818,10 @@ fX32 () {
 
 
 
-	sudo mhwd-gpu --status &> /dev/null
 	sudo mhwd-gpu --check &> /dev/null
+	sudo mhwd-gpu --status &> /dev/null
+
+
 
 	if [[ $cntErr -eq 0 && $cntErrDwnl -eq 0 ]] ; then 
 
@@ -1018,9 +1032,11 @@ fX64 () {
 
 
 
-	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $mltlDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
+#	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $mltlDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
+	cntAll=$(expr $baseDevelPkgsCNTAll + $mltlDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
 
-	pkgsAll="$updPkgsCl$baseDevelPkgsCl$mltlDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
+#	pkgsAll="$updPkgsCl$baseDevelPkgsCl$mltlDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
+	pkgsAll="$baseDevelPkgsCl$mltlDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
 
 	cntCurr=0 ; cntErr=0 ; cntErrNames="" ; cntErrDwnl=0 ; cntErrNamesDwnl=""
 
@@ -1077,10 +1093,18 @@ fX64 () {
 
 
 #	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
-	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+#	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+	listOne="$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
 
 #	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
-	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+#	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+	listCntOne=$pkgsCNTAll ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+
+
+
+	sudo pacman -S base-devel --noconfirm ; echo ; sudo pacman -S yaourt --noconfirm ; echo ; sudo pacman -S steam-manjaro --noconfirm ; echo
+
+
 
 	cntCurr=0
 
@@ -1096,7 +1120,8 @@ fX64 () {
 
 		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntOne ]] ; then
 
-			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+			echo -en "Установка пакетов _ Installing packages: $listCntOne _ $cntCurr\033[0K\r"
 
 			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
 
@@ -1124,7 +1149,8 @@ fX64 () {
 
 	cntCurr=$( expr $cntCurr + $partsCnt )
 
-	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+	echo -en "Установка пакетов _ Installing packages: $listCntOne _ $cntCurr\033[0K\r"
 
 	echo ; echo
 
@@ -1146,32 +1172,32 @@ fX64 () {
 
 
 
-	if ! sudo pacman -Qq gcc-multilib &> /dev/null ; then 
+#	if ! sudo pacman -Qq gcc-multilib &> /dev/null ; then 
 
-		sudo pacman -Rdd gcc --noconfirm &> /dev/null
-		sudo pacman -Rdd gcc-libs --noconfirm &> /dev/null
+#		sudo pacman -Rdd gcc --noconfirm &> /dev/null
+#		sudo pacman -Rdd gcc-libs --noconfirm &> /dev/null
 
-		for currPkg in $listTwo ; do
+#		for currPkg in $listTwo ; do
 
-			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
 
-			if sudo pacman -S $currPkg --noconfirm &> /dev/null ; then
+#			if sudo pacman -S $currPkg --noconfirm &> /dev/null ; then
 
-				cntCurr=$( expr $cntCurr + 1 )
+#				cntCurr=$( expr $cntCurr + 1 )
 
-			else
+#			else
 
-				cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+#				cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
 
-			fi
+#			fi
 
-		done
+#		done
 
-	else
+#	else
 
-		for currPkg in $listTwo ; do cntCurr=$( expr $cntCurr + 1 ) ; done
+#		for currPkg in $listTwo ; do cntCurr=$( expr $cntCurr + 1 ) ; done
 
-	fi
+#	fi
 
 
 
@@ -1181,53 +1207,55 @@ fX64 () {
 
 
 
-	sudo mhwd-gpu --status &> /dev/null
-	sudo mhwd-gpu --check &> /dev/null
 	sudo mhwd-gpu --setlib32 true &> /dev/null
+	sudo mhwd-gpu --check &> /dev/null
+	sudo mhwd-gpu --status &> /dev/null
 
-	partsCnt=0 ; partsPkg="" ; cntCh=0
 
-	for currPkg in $listThree ; do
 
-		cntCh=$( expr $cntCh + 1 )
+#	partsCnt=0 ; partsPkg="" ; cntCh=0
 
-		partsCnt=$( expr $partsCnt + 1 )
+#	for currPkg in $listThree ; do
 
-		partsPkg="$partsPkg$currPkg "
+#		cntCh=$( expr $cntCh + 1 )
 
-		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntThree ]] ; then
+#		partsCnt=$( expr $partsCnt + 1 )
 
-			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#		partsPkg="$partsPkg$currPkg "
 
-			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
+#		if [[ $partsCnt -eq 20 || $cntCh -eq $listCntThree ]] ; then
 
-				cntCurr=$( expr $cntCurr + $partsCnt )
+#			echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
 
-			else
+#			if sudo pacman -S $partsPkg --noconfirm &> /dev/null ; then
 
-				for errPkg in $partsPkg ; do
+#				cntCurr=$( expr $cntCurr + $partsCnt )
+
+#			else
+
+#				for errPkg in $partsPkg ; do
 				
-					if ! sudo pacman -S $errPkg --noconfirm &> /dev/null ; then
+#					if ! sudo pacman -S $errPkg --noconfirm &> /dev/null ; then
 
-						cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
+#						cntErr=$( expr $cntErr + 1 ) ; cntErrNames="$cntErrNames$errPkg "
 
-					fi
+#					fi
 
-				done
+#				done
 
-			fi
+#			fi
 
-			partsCnt=0 ; partsPkg=""
+#			partsCnt=0 ; partsPkg=""
 
-		fi
+#		fi
 
-	done
+#	done
 
-	cntCurr=$( expr $cntCurr + $partsCnt )
+#	cntCurr=$( expr $cntCurr + $partsCnt )
 
-	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
+#	echo -en "Установка пакетов _ Installing packages: $cntAll _ $cntCurr\033[0K\r"
 
-	echo ; echo
+#	echo ; echo
 
 
 
