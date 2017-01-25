@@ -13,7 +13,7 @@
 
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.5"
+scriptVers="2.0.6"
 osBaseName="Manjaro NET"
 osBaseVers="16.08"
 osBaseBit=$( uname -m )
@@ -560,17 +560,35 @@ fX32 () {
 
 		echo "Установка обновлений _ Installing updates "
 		echo
+
 		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-		sudo pacman -Su --noconfirm
-		echo
-		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
-		echo
-		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
-		echo
-		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
-		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
-		echo
-		reboot
+		sudo pacman -Rdd xf86-input-acecad --noconfirm &> /dev/null
+		sudo pacman -Rdd xf86-input-joystick --noconfirm &> /dev/null
+
+		if ! sudo pacman -Su --noconfirm ; then
+
+			sed -i '4s/.*/0/' ~/.tmp-sz
+
+			echo
+			echo "Обнаружены ошибки при обновлении, установка отменена _ There are some errors found during update, installation failed "
+			echo
+			exit
+
+		else
+
+			sed -i '4s/.*/0/' ~/.tmp-sz
+
+			echo
+			echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
+			echo
+			echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
+			echo
+			echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
+			for i in {1..10} ; do echo -n "." ; sleep 1s ; done
+			echo
+			reboot
+
+		fi
 
 	fi
 
@@ -672,17 +690,33 @@ fX32 () {
 
 
 
+	if ! sudo pacman -Sp steam-manjaro --print-format %n &> /dev/null ; then sudo pacman -Sp steam-manjaro --print-format %n ; sed -i '4s/.*/0/' ~/.tmp-sz ; echo ; exit ; fi
+
+	corr=0
+	stmPkgs=$( sudo pacman -Sp steam-manjaro --print-format %n )
+	stmPkgsCNTAll=0 ; stmPkgsCl=""
+
+	for stmPkg in $stmPkgs ; do
+
+		if [ $corr -eq 0 ] ; then if sudo pacman -Si $stmPkg &> /dev/null ; then corr=1 ; fi ; fi
+		
+		if [ $corr -eq 1 ] ; then stmPkgsCNTAll=$( expr $stmPkgsCNTAll + 1 ) ; stmPkgsCl="$stmPkgsCl$stmPkg " ; fi
+
+	done
+
+
+
 ### download all packages instead AUR
 #-#
 ### скачивание общего списка пакетов, пакеты AUR будут устанавливаться отдельно
 
 
 
-#	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
-	cntAll=$(expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll);
+#	cntAll=$(expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
+	cntAll=$(expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll + $stmPkgsCNTAll);
 
-#	pkgsAll="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
-	pkgsAll="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl"
+#	pkgsAll="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
+	pkgsAll="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl$stmPkgsCl"
 
 	cntCurr=0 ; cntErr=0 ; cntErrNames="" ; cntErrDwnl=0 ; cntErrNamesDwnl=""
 
@@ -738,13 +772,9 @@ fX32 () {
 
 
 
-#	listOne="$updPkgsCl$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
-#	listOne="$baseDevelPkgsCl$yaourtPkgsCl$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
-	listOne="$pkgsCl" ; listTwo="$mltlDevelPkgsCl" ; listThree="$stmPkgsCl"
+	listOne="$pkgsCl"
 
-#	listCntOne=$( expr $updPkgsCNTAll + $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
-#	listCntOne=$( expr $baseDevelPkgsCNTAll + $yaourtPkgsCNTAll + $pkgsCNTAll ) ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
-	listCntOne=$pkgsCNTAll ; listCntTwo=$mltlDevelPkgsCNTAll ; listCntThree=$stmPkgsCNTAll
+	listCntOne=$pkgsCNTAll
 
 
 
@@ -876,17 +906,35 @@ fX64 () {
 
 		echo "Установка обновлений _ Installing updates "
 		echo
+
 		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-		sudo pacman -Su --noconfirm
-		echo
-		echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
-		echo
-		echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
-		echo
-		echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
-		for i in {1..10} ; do echo -n "." ; sleep 1s ; done
-		echo
-		reboot
+		sudo pacman -Rdd xf86-input-acecad --noconfirm &> /dev/null
+		sudo pacman -Rdd xf86-input-joystick --noconfirm &> /dev/null
+
+		if ! sudo pacman -Su --noconfirm ; then
+
+			sed -i '4s/.*/0/' ~/.tmp-sz
+
+			echo
+			echo "Обнаружены ошибки при обновлении, установка отменена _ There are some errors found during update, installation failed "
+			echo
+			exit
+
+		else
+
+			sed -i '4s/.*/0/' ~/.tmp-sz
+
+			echo
+			echo "Требуется перезагрузка после обновления системы _ Reboot is required after updating system "
+			echo
+			echo "После перезагрузки снова запустите команду ./$gen из под своего пользователя _ After rebooting run again ./$gen command by your user "
+			echo
+			echo -n "Перезагрузка через 10 секунд _ Reboot in 10 seconds "
+			for i in {1..10} ; do echo -n "." ; sleep 1s ; done
+			echo
+			reboot
+
+		fi
 
 	fi
 
