@@ -13,7 +13,7 @@
 
 scriptName="mobox-sz"
 scriptAuthor="setsZI, Asia/Almaty Kazakhstan"
-scriptVers="2.0.6"
+scriptVers="2.0.7"
 osBaseName="Manjaro NET"
 osBaseVers="16.08"
 osBaseBit=$( uname -m )
@@ -562,9 +562,17 @@ fX32 () {
 		echo "Установка обновлений _ Installing updates "
 		echo
 
-		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-		sudo pacman -Rdd xf86-input-acecad --noconfirm &> /dev/null
-		sudo pacman -Rdd xf86-input-joystick --noconfirm &> /dev/null
+		sudo pacman -Rdd xf86-input-aiptek --noconfirm
+		sudo pacman -Rdd xf86-input-acecad --noconfirm
+		sudo pacman -Rdd xf86-input-joystick --noconfirm
+		
+		if sudo rm /usr/lib/xorg/modules/extensions/libglx.so ; then
+
+			echo
+			echo "/usr/lib/xorg/modules/extensions/libglx.so deleted"
+			echo
+		
+		fi
 
 		if ! sudo pacman -Su --noconfirm ; then
 
@@ -908,9 +916,17 @@ fX64 () {
 		echo "Установка обновлений _ Installing updates "
 		echo
 
-		sudo pacman -Rdd xf86-input-aiptek --noconfirm &> /dev/null
-		sudo pacman -Rdd xf86-input-acecad --noconfirm &> /dev/null
-		sudo pacman -Rdd xf86-input-joystick --noconfirm &> /dev/null
+		sudo pacman -Rdd xf86-input-aiptek --noconfirm
+		sudo pacman -Rdd xf86-input-acecad --noconfirm
+		sudo pacman -Rdd xf86-input-joystick --noconfirm
+		
+		if sudo rm /usr/lib/xorg/modules/extensions/libglx.so ; then
+
+			echo
+			echo "/usr/lib/xorg/modules/extensions/libglx.so deleted"
+			echo
+
+		fi
 
 		if ! sudo pacman -Su --noconfirm ; then
 
