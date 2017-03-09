@@ -3,7 +3,7 @@
 
 Manjaro Openbox autobuild script for Manjaro NET 16.08
 
-Current version 2.0.6
+Current version 2.0.7
 
 
 Installation:
